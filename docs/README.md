@@ -3,24 +3,24 @@ layout: home
 permalink: index.html
 
 # Please update this with your repository name and title
-repository-name: eYY-4yp-project-template
-title:
+repository-name: e18-4yp-Reinforcement-Learning-enabled-Recommendation-System-For-Emotional-Support
+title: Reinforcement Learning Enabled Egocentric Social Network Based Activity Recommendation System for Providing Emotional Support
 ---
 
 [comment]: # "This is the standard layout for the project, but you can clean this and use your own template"
 
-# Project Title
+# Reinforcement Learning Enabled Egocentric Social Network Based Activity Recommendation System for Providing Emotional Support
 
 #### Team
 
-- eNumber, Name, [email](mailto:name@email.com)
-- eNumber, Name, [email](mailto:name@email.com)
-- eNumber, Name, [email](mailto:name@email.com)
+- E/18/180, Nimnad Mihiranga Kodituwakku , [e18180@eng.pdn.ac.lk](mailto:e18180@eng.pdn.ac.lk)
+- E/18/242, Nimnadi J.S., [e18242@eng.pdn.ac.lk](mailto:e18242@eng.pdn.ac.lk)
+- E/18/266, Nisala Induwara Premathilaka, [e18266@eng.pdn.ac.lk](mailto:e18266@eng.pdn.ac.lk)
 
 #### Supervisors
 
-- Name, [email](mailto:name@eng.pdn.ac.lk)
-- Name, [email](mailto:name@eng.pdn.ac.lk)
+- Ms. Yasodha Wimukthi, [yasodhav@eng.pdn.ac.lk](mailto:yasodhav@eng.pdn.ac.lk)
+- Dr. Dharshana Kasthurirathne, [dkasthurirathna@gmail.com](mailto:dkasthurirathna@gmail.com)
 
 #### Table of content
 
@@ -43,6 +43,8 @@ This is a sample image, to show how to add images to your page. To learn more op
 
 
 ## Abstract
+Here we presents a comprehensive analysis of research on media recommendation systems, encompassing music, movies, and books… etc. Traditional recommender systems primarily focus on factors such as user preferences, genre similarity, and collaborative filtering, often neglecting the emotional impact and personalization of media on users. To address this limitation, this paper explores the integration of reinforcement learning and egocentric networks to improve user experience through emotional engagement and social context.  The study aims to enhance the personalization and relevance of recommendations, addressing the limitations of traditional systems and paving the way for more emotionally and socially attuned media suggestions.. The findings of this review highlight the potential of RL and egocentric networks in improving media recommendation systems and providing users with more personalized and emotionally attuned media suggestions.
+
 
 ## Related works
 
@@ -68,8 +70,8 @@ This is a sample image, to show how to add images to your page. To learn more op
 
 [//]: # ( NOTE: EDIT THIS LINKS WITH YOUR REPO DETAILS )
 
-- [Project Repository](https://github.com/cepdnaclk/repository-name)
-- [Project Page](https://cepdnaclk.github.io/repository-name)
+- [Project Repository](https://github.com/cepdnaclk/e18-4yp-Reinforcement-Learning-enabled-Recommendation-System-For-Emotional-Support)
+- [Project Page](https://cepdnaclk.github.io/e18-4yp-Reinforcement-Learning-enabled-Recommendation-System-For-Emotional-Support)
 - [Department of Computer Engineering](http://www.ce.pdn.ac.lk/)
 - [University of Peradeniya](https://eng.pdn.ac.lk/)
 
