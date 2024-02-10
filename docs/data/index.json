@@ -1,7 +1,7 @@
 {
     "team": [
         {
-            "name": "Nimnad Mihiranga Kodituwakku",
+            "name": "Nimnad Mihiranga",
             "email": "e18180@eng.pdn.ac.lk",
             "eNumber": "E/18/180"
         },
@@ -11,20 +11,22 @@
             "eNumber": "E/18/242"
         },
         {
-            "name": "Nisala Induwara Premathilaka",
+            "name": "Nisala Induwara",
             "email": "e18266@eng.pdn.ac.lk",
             "eNumber": "E/18/266"
         }
     ],
     "supervisors": [
         {
-            "name": "Ms. Yasodha Wimukthi",
-            "email": "yasodhav@eng.pdn.ac.lk"
+            "name": "Dr. Dharshana Kasthurirathna",
+            "email": "dharshana.k@sliit.lk"
         },
         {
-            "name": "Dr. Dharshana Kasthurirathne",
-            "email": "dkasthurirathna@gmail.com"
+            "name": "Ms. Yasodha Vimukthi",
+            "email": "yasodhav@eng.pdn.ac.lk"
         }
     ],
+
+
     "tags": ["Final Year Projects"]
 }
