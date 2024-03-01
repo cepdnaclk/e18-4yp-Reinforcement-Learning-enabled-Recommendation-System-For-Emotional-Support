@@ -75,14 +75,6 @@ Reinforcement Learning based recommendation systems are mainly based on a framew
 
 Below images shows how recent researchers used above framework to their research. 
 
-![state](./images/state.png) 
-
-![optimization](./images/optimization.png) 
-
-![reward](./images/reward.png) 
-
-![environment](./images/environment.png) 
-
 
 ## Methodology
 We are proposed a mobile application with an activity recommendation system to uplift the users mental health. The application will be taken two inputs from the users which are mentel state of the user and their preferences. We are looking to recommend three types of actrivities to users according to their preferences. They are music, movie and book. The recommendation system will be eveloped by intigrating reinforcement learning and ego centric network to achive more personalized system. Below image will show the arcitecture of the proposed system. 
