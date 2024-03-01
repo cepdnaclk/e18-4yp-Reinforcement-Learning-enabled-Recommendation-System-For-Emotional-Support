@@ -96,6 +96,8 @@ Integrating reinforcement learning and ego-centric networks, we are looking to d
 3. **Ego-Centric Network:**
    - Represents the user's network which have similar preferences.
    - Each node in the network represents a person, and edges represent relationships.
+   - From the entrire network we can filter out one person's egocentric network. 
+   ![ego](./images/ego.png)
 
 4. **Personalized Recommendations:**
    - The RL module and ego-centric network work together to generate personalized recommendations.
