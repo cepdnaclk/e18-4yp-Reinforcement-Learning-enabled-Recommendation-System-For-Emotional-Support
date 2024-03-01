@@ -26,13 +26,14 @@ title: Reinforcement Learning Enabled Egocentric Social Network Based Activity R
 
 1. [Abstract](#abstract)
 2. [Motivation](#motivation)
-3. [Related works](#related-works)
-4. [Methodology](#methodology)
-5. [Experiment Setup and Implementation](#experiment-setup-and-implementation)
-6. [Results and Analysis](#results-and-analysis)
-7. [Conclusion](#conclusion)
-8. [Publications](#publications)
-9. [Links](#links)
+3. [What is a Recomendation System?](#recomendation-system)
+4. [Related works](#related-works)
+5. [Methodology](#methodology)
+6. [Experiment Setup and Implementation](#experiment-setup-and-implementation)
+7. [Results and Analysis](#results-and-analysis)
+8. [Conclusion](#conclusion)
+9. [Publications](#publications)
+10. [Links](#links)
 
 ---
 
@@ -48,11 +49,31 @@ Here we presents a comprehensive analysis of research on media recommendation sy
 
 
 ## Motivation
-In response to the pervasive loneliness epidemic, our project aims to revolutionize emotional support through a Reinforcement Learning Enabled Recommendation System. Addressing the risks associated with loneliness, we leverage social connections, preferences, and personalized recommendations to enhance mental well-being, offering tailored activities, music, books, or films. Our mobile app ensures high efficacy with ease, low effort, and strong motivation for fostering meaningful connections and combating the alarming consequences of social isolation.
+In response to the pervasive loneliness epidemic, our project aims to revolutionize emotional support through a Reinforcement Learning Enabled Recommendation System. Addressing the risks associated with loneliness, we leverage social connections, preferences, and personalized recommendations to enhance mental well-being, offering tailored activities, music, books, or films. Our mobile app ensures high efficacy with ease, low effort, and strong motivation for fostering meaningful connections and combating the alarming consequences of social isolation. Below image shows a result of reasearch for selected set of peoples number of minutes spent alone per day according to their age groups. 
 
-Below image shows a result of reasearch for selected set of peoples number of minutes spent alone per day according to their age groups. 
+
+## What is a Recommendation System?
+A recommendation system is a software algorithm that analyzes user preferences, behaviors, or interactions to suggest personalized content, products, or services, enhancing user experience and engagement. There are several components in recommendation systems. They are User Profile, Item Profile, Recommendation Engine, Data Source, Algorithm, Evaluation Metrics, User Interface, Feedback Loop. Below image show how general structure of a recommendation system.
+
 
 ## Related works
+When go through the related reaserch work we could identify several methodologies have been used to develop recommendation systems. 
+
+### Traditional Methods
+Traditional methods can be classsified into main three types. Content based filtering, Colloborative filtering and Hybrid methods. Content-Based Filtering suggests items by analyzing their features, while Collaborative Filtering recommends based on user preferences—either by finding similar users (User-Based) or similar items (Item-Based). Hybrid methods combine both item characteristics and user preferences for a comprehensive and effective recommendation approach.
+
+### Deep Learning Techniques
+Deep learning techniques, including Multi-Layer Perceptron, Autoencoder, Convolutional Neural Network, Recurrent Neural Network, and others, enhance recommendation systems. These methods leverage diverse data types, such as emotions detected through facial expressions or text inputs, to provide personalized and accurate recommendations.
+
+### Reinforcement Learning Technique
+Reinforcement Learning based recommendation systems are mainly based on a framework with four stages. They are state representation, policy optimization, reward formulation and environment building. 
+
+**State representation** can be can be items, features (user, item, context), or encoded embeddings for effective training in DRL-based RSs. There are main three types of representations can be identified as RS1, RS2 and RS3. In the RS1 the items are treated as states, in the RS2 the features from users, items and contexts are treated as states, while the RS3 considers the encoded embeddings. 
+**Policy optimizations** involves choosing actions based on states. Traditional RL methods include tabular (policy iteration, Q-learning) and approximate (fitted Q, gradient value iteration), while DRL methods categorize into value-based (DQN), policy gradient (REINFORCE), and actor-critic (DDPG). 
+**Reward formulation** is crucial for guiding agent behavior. Rewards can be simple numerical signals (sparse reward) or functions of observations (rich reward), designed through trial-and-error in the absence of definite rules.
+**Building environments** for RLRSs evaluation is challenging. Methods include offline (static dataset), simulation (user model), and online (real users, real-time) approaches, each with varying complexities and costs.
+
+Below images shows how recent researchers used above framework to their research. 
 
 
 ## Methodology
