@@ -51,6 +51,7 @@ Here we presents a comprehensive analysis of research on media recommendation sy
 ## Motivation
 In response to the pervasive loneliness epidemic, our project aims to revolutionize emotional support through a Reinforcement Learning Enabled Recommendation System. Addressing the risks associated with loneliness, we leverage social connections, preferences, and personalized recommendations to enhance mental well-being, offering tailored activities, music, books, or films. Our mobile app ensures high efficacy with ease, low effort, and strong motivation for fostering meaningful connections and combating the alarming consequences of social isolation. Below image shows a result of reasearch for selected set of peoples number of minutes spent alone per day according to their age groups. 
 
+![age](./images/age.jpeg)
 
 ## What is a Recommendation System?
 A recommendation system is a software algorithm that analyzes user preferences, behaviors, or interactions to suggest personalized content, products, or services, enhancing user experience and engagement. There are several components in recommendation systems. They are User Profile, Item Profile, Recommendation Engine, Data Source, Algorithm, Evaluation Metrics, User Interface, Feedback Loop. Below image show how general structure of a recommendation system.
@@ -74,12 +75,13 @@ Reinforcement Learning based recommendation systems are mainly based on a framew
 **State representation** can be can be items, features (user, item, context), or encoded embeddings for effective training in DRL-based RSs. There are main three types of representations can be identified as RS1, RS2 and RS3. In the RS1 the items are treated as states, in the RS2 the features from users, items and contexts are treated as states, while the RS3 considers the encoded embeddings. **Policy optimizations** involves choosing actions based on states. Traditional RL methods include tabular (policy iteration, Q-learning) and approximate (fitted Q, gradient value iteration), while DRL methods categorize into value-based (DQN), policy gradient (REINFORCE), and actor-critic (DDPG). **Reward formulation** is crucial for guiding agent behavior. Rewards can be simple numerical signals (sparse reward) or functions of observations (rich reward), designed through trial-and-error in the absence of definite rules.**Building environments** for RLRSs evaluation is challenging. Methods include offline (static dataset), simulation (user model), and online (real users, real-time) approaches, each with varying complexities and costs.
 
 Below images shows how recent researchers used above framework to their research. 
-
+![reward](./images/state_reward.jpeg)
+![policy](./images/policy.jpeg)
 
 ## Methodology
 We are proposed a mobile application with an activity recommendation system to uplift the users mental health. The application will be taken two inputs from the users which are mentel state of the user and their preferences. We are looking to recommend three types of actrivities to users according to their preferences. They are music, movie and book. The recommendation system will be eveloped by intigrating reinforcement learning and ego centric network to achive more personalized system. Below image will show the arcitecture of the proposed system. 
 
-![proposed system](./images/proposed_system.png)
+![proposed system](./images/proposed_system1.jpeg)
 
 Integrating reinforcement learning and ego-centric networks, we are looking to develop a system for personalized emotional support. This system will understand and respond to each user's emotional state and preferences, offering an adaptive user experience with real-time responses. Through focused content delivery aligned with users' emotional history, it aims to provide tailored and meaningful engagement. Users will be encouraged to participate in discussions and seek support, fostering an active and supportive community. The system's continuous learning capability, driven by user interactions, ensures an evolving and responsive platform for sustained emotional well-being.
 
