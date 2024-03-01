@@ -25,13 +25,14 @@ title: Reinforcement Learning Enabled Egocentric Social Network Based Activity R
 #### Table of content
 
 1. [Abstract](#abstract)
-2. [Related works](#related-works)
-3. [Methodology](#methodology)
-4. [Experiment Setup and Implementation](#experiment-setup-and-implementation)
-5. [Results and Analysis](#results-and-analysis)
-6. [Conclusion](#conclusion)
-7. [Publications](#publications)
-8. [Links](#links)
+2. [Motivation](#motivation)
+3. [Related works](#related-works)
+4. [Methodology](#methodology)
+5. [Experiment Setup and Implementation](#experiment-setup-and-implementation)
+6. [Results and Analysis](#results-and-analysis)
+7. [Conclusion](#conclusion)
+8. [Publications](#publications)
+9. [Links](#links)
 
 ---
 
@@ -46,7 +47,13 @@ This is a sample image, to show how to add images to your page. To learn more op
 Here we presents a comprehensive analysis of research on media recommendation systems, encompassing music, movies, and books… etc. Traditional recommender systems primarily focus on factors such as user preferences, genre similarity, and collaborative filtering, often neglecting the emotional impact and personalization of media on users. To address this limitation, this paper explores the integration of reinforcement learning and egocentric networks to improve user experience through emotional engagement and social context.  The study aims to enhance the personalization and relevance of recommendations, addressing the limitations of traditional systems and paving the way for more emotionally and socially attuned media suggestions.. The findings of this review highlight the potential of RL and egocentric networks in improving media recommendation systems and providing users with more personalized and emotionally attuned media suggestions.
 
 
+## Motivation
+In response to the pervasive loneliness epidemic, our project aims to revolutionize emotional support through a Reinforcement Learning Enabled Recommendation System. Addressing the risks associated with loneliness, we leverage social connections, preferences, and personalized recommendations to enhance mental well-being, offering tailored activities, music, books, or films. Our mobile app ensures high efficacy with ease, low effort, and strong motivation for fostering meaningful connections and combating the alarming consequences of social isolation.
+
+Below image shows a result of reasearch for selected set of peoples number of minutes spent alone per day according to their age groups. 
+
 ## Related works
+
 
 ## Methodology
 
