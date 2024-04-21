@@ -1,13 +1,14 @@
 import numpy as np
 
 class QLearningRecommendationSystem:
-    def __init__(self, state_space_size, action_space_size, alpha, gamma, epsilon, ego_network):
+    def __init__(self, state_space_size, action_space_size, alpha, gamma, epsilon, ego_network, max_connections):
         self.state_space_size = state_space_size
         self.action_space_size = action_space_size
         self.alpha = alpha  # learning rate
         self.gamma = gamma  # discount factor
         self.epsilon = epsilon  # exploration rate
         self.q_table = np.zeros((state_space_size, action_space_size))
+        self.max_connections = max_connections
         self.ego_network = ego_network
 
     def choose_action(self, state):
@@ -25,6 +26,37 @@ class QLearningRecommendationSystem:
         max_next_q_value = np.max(self.q_table[next_state])
         new_q_value = old_q_value + self.alpha * (reward + self.gamma * max_next_q_value - old_q_value)
         self.q_table[state, action] = new_q_value
+
+# Limit the egocentric network 
+def filter_ego_network(self, user_id):
+    # Retrieve the user's connections from the ego-centric network
+    user_connections = self.ego_network.get(user_id, [])
+
+    # Example relevance criteria: select connections who share similar preferences
+    relevant_connections = [connection for connection in user_connections if connection['preference_similarity'] > 0.5]
+
+    # Limit the size of the ego-centric network
+    filtered_network = relevant_connections[:self.max_connections]
+
+    return filtered_network
+
+def update_ego_network(self, user_id, new_connection):
+    # Update ego-centric network dynamically
+    if user_id in self.ego_network:
+        # Check if the new connection already exists in the network
+        existing_connections = [connection['id'] for connection in self.ego_network[user_id]]
+        if new_connection['id'] not in existing_connections:
+            # Add the new connection
+            self.ego_network[user_id].append(new_connection)
+            # Check if the network size exceeds the limit
+            if len(self.ego_network[user_id]) > self.max_connections:
+                # Remove the least relevant connection
+                least_relevant_connection = min(self.ego_network[user_id], key=lambda x: x['relevance_score'])
+                self.ego_network[user_id].remove(least_relevant_connection)
+    else:
+        # Initialize the ego-centric network for the user
+        self.ego_network[user_id] = [new_connection]
+
 
     def train(self, num_episodes, user_preferences):
         for episode in range(num_episodes):
@@ -64,9 +96,10 @@ alpha = 0.1
 gamma = 0.9
 epsilon = 0.1
 ego_network = {}  # ego-centric network data
+max_connections = 10
 
 # Initialize the recommendation system
-q_learning_system = QLearningRecommendationSystem(state_space_size, action_space_size, alpha, gamma, epsilon, ego_network)
+q_learning_system = QLearningRecommendationSystem(state_space_size, action_space_size, alpha, gamma, epsilon, ego_network, max_connections)
 
 # Train the recommendation system
 num_episodes = 1000  
