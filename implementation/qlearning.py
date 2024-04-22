@@ -28,17 +28,34 @@ class QLearningRecommendationSystem:
         self.q_table[state, action] = new_q_value
 
 # Limit the egocentric network 
+def get_preference_similarity(user1_preferences, user2_preferences):
+    # Convert preferences to sets
+    user1_set = set(user1_preferences)
+    user2_set = set(user2_preferences)
+
+    # Compute Jaccard similarity coefficient
+    intersection = len(user1_set.intersection(user2_set))
+    union = len(user1_set.union(user2_set))
+    similarity = intersection / union if union != 0 else 0  # Handle division by zero
+
+    return similarity
+
 def filter_ego_network(self, user_id):
     # Retrieve the user's connections from the ego-centric network
     user_connections = self.ego_network.get(user_id, [])
 
-    # Example relevance criteria: select connections who share similar preferences
+    # Calculate preference similarity for each connection
+    for connection in user_connections:
+        connection['preference_similarity'] = get_preference_similarity(user_preferences[user_id], user_preferences[connection['id']])
+
+    # Example relevance criteria: select connections with preference_similarity above a threshold
     relevant_connections = [connection for connection in user_connections if connection['preference_similarity'] > 0.5]
 
     # Limit the size of the ego-centric network
     filtered_network = relevant_connections[:self.max_connections]
 
     return filtered_network
+
 
 def update_ego_network(self, user_id, new_connection):
     # Update ego-centric network dynamically
