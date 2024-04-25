@@ -1,5 +1,8 @@
 import numpy as np
 import pandas as pd
+import time
+episode_start_time = time.time()  # Record the start time of the episode
+episode_duration_limit = 60  # Set a time limit for each episode (e.g., 60 seconds)
 
 # Mappings from genre/emotion names to integer indices
 genre_to_index = {'metal': 0, 'rock': 1, 'pop':2, 'electronic':3, 'electro':4, 'dance':5, 'world-music':6, 'soul':7, 'blues':8, 'alternative':9, 'indie':10,'folk':11}
@@ -20,6 +23,21 @@ def get_recommendations(genre_index, emotion_index):
     # recommendations = ['Song 1', 'Song 2', 'Song 3']
 
     return recommendations
+
+def calculate_reward(recommendations):
+    positive_interaction = True  # Placeholder: determine if user interaction is positive or not
+    if positive_interaction:
+        reward = 1
+    else:
+        reward = 0
+
+    return reward
+
+def select_next_state():
+    next_state = 0  # Placeholder: replace with logic to determine the next state
+
+    return next_state
+
 
 class QLearning:
     def __init__(self, state_space_size, action_space_size, alpha, gamma, epsilon):
@@ -66,7 +84,8 @@ class QLearning:
                 # Update state
                 state = next_state
 
-                if done:
+
+                if time.time() - episode_start_time >= episode_duration_limit:
                     break
 
 
@@ -94,15 +113,19 @@ class QLearning:
 
 
     def execute_action(self, state):
-        # Retrieve recommendations based on the current state
-        # Example: If state represents a combination of genre and emotion indices
         genre_index = state // num_emotions
         emotion_index = state % num_emotions
 
         # Retrieve recommendations for the given genre and emotion
         recommendations = get_recommendations(genre_index, emotion_index)
 
-        return recommendations
+        # Placeholder: Calculate reward (for example, based on user interaction with recommendations)
+        reward = calculate_reward(recommendations)
+
+        # Placeholder: Generate next state (for example, by selecting a new state based on user input)
+        next_state = select_next_state()
+
+        return reward, next_state
 
 
 
