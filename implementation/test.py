@@ -69,25 +69,6 @@ relevant_suggestions = get_relevant_suggestions(user_preferences, emotion, music
 print("Relevant initial suggestions based on emotion:", relevant_suggestions)
 
 
-
-# Define states, actions, and initial Q-table
-states = range(100)  # Sample 100 states
-actions = ['musics', 'movies', 'books']  # Select preferences: music, movies, books
-Q = np.zeros((len(states), len(actions)))  # Initialize Q-table with zeros
-
-# Define reward function
-def get_reward(feedback):
-    if feedback == 'thumbs_up':
-        return 5
-    elif feedback == 'thumbs_down':
-        return -5
-    elif feedback == 'skip':
-        return -2
-    else:
-        return -0
-
-
-
 def get_relevant_activity(user_preferences, selection, df1, df2, df3):
     # Find the relevant activity type and genre for the selected item
     for activity_type, df in zip(['music', 'books', 'movies'], [df1, df2, df3]):
@@ -104,4 +85,21 @@ print("Relevant activity type:", activity_type)
 print("Genre of the selected activity:", selected_genre)
 
 
+
+
+# Define states, actions, and initial Q-table
+states = range(100)  # Sample 100 states
+actions = ['musics', 'movies', 'books']  # Select preferences: music, movies, books
+Q = np.zeros((len(states), len(actions)))  # Initialize Q-table with zeros
+
+# Define reward function
+def get_reward(feedback):
+    if feedback == 'thumbs_up':
+        return 5
+    elif feedback == 'thumbs_down':
+        return -5
+    elif feedback == 'skip':
+        return -2
+    else:
+        return -0
 
