@@ -33,30 +33,6 @@ movie_df = pd.read_csv("./datasets/movie_filtered_data.csv", sep = ",")
 music_df = pd.read_csv("./datasets/music_filtered_data.csv", sep = ",")
 
 
-# # Function to give initial recommendations based on user preferences
-# def initial_recommendation(user_preferences, df1, df2, df3):
-#     recommendations = {}
-#     for state, preferences in user_preferences.items():
-#         music_recommendations = []
-#         for genres in preferences['music']:
-#             music_recommendations.extend(music_df[music_df['genre'].apply(lambda x: any(genre in x for genre in genres))]['name'].head(2).tolist())
-        
-#         book_recommendations = []
-#         for genres in preferences['books']:
-#             book_recommendations.extend(book_df[book_df['genre'].apply(lambda x: any(genre in x for genre in genres))]['name'].head(2).tolist())
-        
-#         movie_recommendations = []
-#         for genres in preferences['movies']:
-#             movie_recommendations.extend(movie_df[movie_df['genre'].apply(lambda x: any(genre in x for genre in genres))]['name'].head(2).tolist())
-        
-#         recommendations[state] = {'music': music_recommendations, 'books': book_recommendations, 'movies': movie_recommendations}
-    
-#     return recommendations
-
-# # Example usage
-# initial_recommendations = initial_recommendation(user_preferences,  music_df, book_df, movie_df)
-# print("Initial recommendations:", initial_recommendations)
-
 def get_relevant_suggestions(user_preferences, emotion, df1, df2, df3):
     # Function to get relevant suggestions based on user's emotion
     preferences = user_preferences.get(emotion, {'music': [], 'books': [], 'movies': []})
@@ -110,32 +86,22 @@ def get_reward(feedback):
     else:
         return -0
 
-# Define learning parameters
-alpha = 0.1  # Learning rate
-gamma = 0.9  # Discount factor
 
-# Q-learning algorithm
-def q_learning(state, action_index, reward, next_state):
-    next_action_index = np.argmax(Q[next_state])
-    Q[state][action_index] += alpha * \
-        (reward + gamma * Q[next_state][next_action_index] - Q[state][action_index])
+
+def get_relevant_activity(user_preferences, selection, df1, df2, df3):
+    # Find the relevant activity type and genre for the selected item
+    for activity_type, df in zip(['music', 'books', 'movies'], [df1, df2, df3]):
+        if selection in df['name'].tolist():
+            genre = df[df['name'] == selection]['genre'].iloc[0]
+            return activity_type, genre
+
+    return None, None
 
 # Example usage
-def recommend_next_activity(emotion_index):
-    state = emotion_index  # Set initial state based on emotion index
-    action_index = np.argmax(Q[state])  # Select action with highest Q-value
-    action = actions[action_index]
-    return action
+selection = 'Daddy Issues'  # Example user selection
+activity_type, selected_genre = get_relevant_activity(user_preferences, selection, music_df, book_df, movie_df)
+print("Relevant activity type:", activity_type)
+print("Genre of the selected activity:", selected_genre)
 
-# Example: Simulate user feedback (thumbs up, thumbs down, skip)
-feedback = 'thumbs_up'  # Example feedback
-reward = get_reward(feedback)
 
-# Update Q-values based on feedback
-next_state = 0  # Example next state
-q_learning(0, 0, reward, next_state)  # Update Q-value
 
-# Get recommendation for next activity
-next_emotion_index = 1  # Example next emotion index
-next_action = recommend_next_activity(next_emotion_index)
-print("Next recommended action:", next_action)
