@@ -1,8 +1,7 @@
 import numpy as np
 import pandas as pd
 import time
-episode_start_time = time.time()  # Record the start time of the episode
-episode_duration_limit = 60  # Set a time limit for each episode (e.g., 60 seconds)
+
 
 # Mappings from genre/emotion names to integer indices
 genre_to_index = {'metal': 0, 'rock': 1, 'pop':2, 'electronic':3, 'electro':4, 'dance':5, 'world-music':6, 'soul':7, 'blues':8, 'alternative':9, 'indie':10,'folk':11}
@@ -68,6 +67,8 @@ class QLearning:
 
     def train(self, num_episodes, user_preferences):
         for episode in range(num_episodes):
+            episode_start_time = time.time()  # Record the start time of the episode
+            episode_duration_limit = 60  # Set a time limit for each episode (e.g., 60 seconds)
             # Initialize state
             state = self.get_state(user_preferences)
 
@@ -84,7 +85,7 @@ class QLearning:
                 # Update state
                 state = next_state
 
-
+                # if len(recommendations) == 3:
                 if time.time() - episode_start_time >= episode_duration_limit:
                     break
 
@@ -130,7 +131,7 @@ class QLearning:
 
 
 state_space_size = 100  
-action_space_size = 3  # Recommend music, movie, book
+action_space_size = 3  # Recommend 3 music
 alpha = 0.1
 gamma = 0.9
 epsilon = 0.1
@@ -140,5 +141,6 @@ q_learning_system = QLearning(state_space_size, action_space_size, alpha, gamma,
 
 # Train the recommendation system
 num_episodes = 1000  
-user_preferences = {}  # User preferences data
+user_preferences = {    'genre': 'rock',  
+    'emotion': 'Frustration' }  # User preferences data
 q_learning_system.train(num_episodes, user_preferences)
