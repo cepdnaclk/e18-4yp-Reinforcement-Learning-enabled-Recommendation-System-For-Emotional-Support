@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 
 
 def get_user_preferences():
@@ -87,6 +88,54 @@ def get_relevant_suggestions(user_preferences, emotion, df1, df2, df3):
     return {'music': music_recommendations[:2], 'books': book_recommendations[:2], 'movies': movie_recommendations[:2]}
 
 # Example usage
-emotion = 'Happy'  # Example emotion
+emotion = 'Sad'  # Example emotion
 relevant_suggestions = get_relevant_suggestions(user_preferences, emotion, music_df, book_df, movie_df)
-print("Relevant suggestions based on emotion:", relevant_suggestions)
+print("Relevant initial suggestions based on emotion:", relevant_suggestions)
+
+
+
+# Define states, actions, and initial Q-table
+states = range(100)  # Sample 100 states
+actions = ['musics', 'movies', 'books']  # Select preferences: music, movies, books
+Q = np.zeros((len(states), len(actions)))  # Initialize Q-table with zeros
+
+# Define reward function
+def get_reward(feedback):
+    if feedback == 'thumbs_up':
+        return 5
+    elif feedback == 'thumbs_down':
+        return -5
+    elif feedback == 'skip':
+        return -2
+    else:
+        return -0
+
+# Define learning parameters
+alpha = 0.1  # Learning rate
+gamma = 0.9  # Discount factor
+
+# Q-learning algorithm
+def q_learning(state, action_index, reward, next_state):
+    next_action_index = np.argmax(Q[next_state])
+    Q[state][action_index] += alpha * \
+        (reward + gamma * Q[next_state][next_action_index] - Q[state][action_index])
+
+# Example usage
+def recommend_next_activity(emotion_index):
+    state = emotion_index  # Set initial state based on emotion index
+    action_index = np.argmax(Q[state])  # Select action with highest Q-value
+    action = actions[action_index]
+    return action
+
+# Example: Simulate user feedback (thumbs up, thumbs down, skip)
+feedback = 'thumbs_up'  # Example feedback
+reward = get_reward(feedback)
+
+# Update Q-values based on feedback
+next_state = 0  # Example next state
+q_learning(0, 0, reward, next_state)  # Update Q-value
+
+# Get recommendation for next activity
+next_emotion_index = 1  # Example next emotion index
+next_action = recommend_next_activity(next_emotion_index)
+print("Next recommended action:", next_action)
