@@ -127,19 +127,60 @@ def get_reward(feedback):
     else:
         return -0
 
-# Example usage
-# Initialize Q-learning agent
-actions = ['music', 'books', 'movies']
-agent = QLearningAgent(actions)
 
-# Simulate user interaction
-state = 'Sad'  # Example initial state
-for _ in range(5):  # Simulate 5 interactions
-    action = agent.get_action(state)
-    print("Recommendation for", state, ":", action)
-    feedback = input("Feedback (thumbs_up, thumbs_down, skip): ").strip()
-    reward = get_reward(feedback)
-    next_state = action  # For simplicity, next state is the action itself
-    agent.update_q_value(state, action, reward, next_state)
-    state = next_state
+music_genres = ['alternative', 'blues', 'dance', 'electro', 'electronic', 'folk', 'indie', 'metal', 'new-age', 'pop', 'rock', 'soul', 'world-music']
+book_genres = ['Romance', 'Travel','Music', 'Poetry', 'Fantasy', 'Historical Fiction', 'Thriller', 'Science Fiction', 'Comics', 'Horror']
+movie_genres = ['Family', 'Drama', 'Romance', 'Travel','Musical', 'Fantasy', 'History', 'Action','Sci-Fi', 'Thriller', 'Comedy', 'Adventure', 'Horror']
+
+music_actions = ['Select Music ' + genre for genre in music_genres]
+book_actions = ['Select Book ' + genre for genre in book_genres]
+movie_actions = ['Select Movie ' + genre for genre in movie_genres]
+
+actions = music_actions + book_actions + movie_actions
+# print(len(actions))
+
+
+# Define states
+num_states = 100  # Number of possible states
+states = range(num_states)
+
+# Initialize Q-table with zeros
+Q = np.zeros((len(states), len(actions)))
+
+# Define learning parameters
+alpha = 0.1  # Learning rate
+gamma = 0.9  # Discount factor
+
+# Define reward function
+def get_reward(feedback):
+    if feedback == 'thumbs_up':
+        return 5
+    elif feedback == 'thumbs_down':
+        return -5
+    elif feedback == 'skip':
+        return -2
+    else:
+        return 0
+
+# Q-learning algorithm
+def q_learning(state, action_index, reward, next_state):
+    next_action_index = np.argmax(Q[next_state])
+    Q[state][action_index] += alpha * (reward + gamma * Q[next_state][next_action_index] - Q[state][action_index])
+
+# Example usage
+# Simulate user feedback
+state = 0  # Initial state
+action_index = 3  # Example action index (Select Music Genre4)
+reward = get_reward('thumbs_up')  # Example reward for thumbs up
+next_state = 1  # Next state after user interaction
+
+# Update Q-values based on feedback
+q_learning(state, action_index, reward, next_state)
+
+# Recommend next action based on Q-values for the next state
+next_state = 1  # Example next state
+next_action_index = np.argmax(Q[next_state])
+next_action = actions[next_action_index]
+print("Next recommended action:", next_action)
+
 
