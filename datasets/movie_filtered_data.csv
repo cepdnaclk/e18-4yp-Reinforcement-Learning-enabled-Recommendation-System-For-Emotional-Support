@@ -1,4 +1,4 @@
-movieId,title,genres,emotions
+movieId,name,genre,emotions
 1,Toy Story (1995),"['Adventure', 'Animation', 'Children', 'Comedy', 'Fantasy']","['Frustration', 'Sad', 'Neutral']"
 2,Jumanji (1995),"['Adventure', 'Children', 'Fantasy']","['Frustration', 'Neutral']"
 3,Grumpier Old Men (1995),"['Comedy', 'Romance']","['Frustration', 'Sad', 'Neutral']"
