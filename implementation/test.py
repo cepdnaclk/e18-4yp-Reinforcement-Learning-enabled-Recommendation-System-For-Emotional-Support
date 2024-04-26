@@ -87,10 +87,34 @@ print("Genre of the selected activity:", selected_genre)
 
 
 
-# Define states, actions, and initial Q-table
-states = range(100)  # Sample 100 states
-actions = ['musics', 'movies', 'books']  # Select preferences: music, movies, books
-Q = np.zeros((len(states), len(actions)))  # Initialize Q-table with zeros
+# Define the Q-learning agent class
+class QLearningAgent:
+    def __init__(self, actions, learning_rate=0.1, discount_factor=0.9, epsilon=0.1):
+        self.actions = actions
+        self.learning_rate = learning_rate
+        self.discount_factor = discount_factor
+        self.epsilon = epsilon
+        self.q_table = {}
+
+    def get_action(self, state):
+        if np.random.rand() < self.epsilon:
+            return np.random.choice(self.actions)
+        else:
+            if state in self.q_table:
+                return max(self.q_table[state], key=self.q_table[state].get)
+            else:
+                return np.random.choice(self.actions)
+
+    def update_q_value(self, state, action, reward, next_state):
+        if state not in self.q_table:
+            self.q_table[state] = {action: 0 for action in self.actions}
+        if next_state not in self.q_table:
+            self.q_table[next_state] = {action: 0 for action in self.actions}
+
+        max_next_action = max(self.q_table[next_state], key=self.q_table[next_state].get)
+        self.q_table[state][action] += self.learning_rate * (
+                reward + self.discount_factor * self.q_table[next_state][max_next_action] - self.q_table[state][action])
+
 
 # Define reward function
 def get_reward(feedback):
@@ -102,4 +126,20 @@ def get_reward(feedback):
         return -2
     else:
         return -0
+
+# Example usage
+# Initialize Q-learning agent
+actions = ['music', 'books', 'movies']
+agent = QLearningAgent(actions)
+
+# Simulate user interaction
+state = 'Sad'  # Example initial state
+for _ in range(5):  # Simulate 5 interactions
+    action = agent.get_action(state)
+    print("Recommendation for", state, ":", action)
+    feedback = input("Feedback (thumbs_up, thumbs_down, skip): ").strip()
+    reward = get_reward(feedback)
+    next_state = action  # For simplicity, next state is the action itself
+    agent.update_q_value(state, action, reward, next_state)
+    state = next_state
 
