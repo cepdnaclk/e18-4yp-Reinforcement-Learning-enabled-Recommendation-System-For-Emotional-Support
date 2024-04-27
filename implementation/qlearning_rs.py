@@ -185,35 +185,39 @@ print("Learned Q-table:")
 print(Q_table)
 
 
-
-# def recommend_activity(Q_table, current_state, music_genres, book_genres, movie_genres):
+# def recommend_activities(Q_table, current_state, music_genres, book_genres, movie_genres, num_recommendations=6):
 #     # Retrieve Q-values for the current state
 #     q_values = Q_table[current_state]
     
-#     # Find the index of the action (activity) with the highest Q-value
-#     action_index = np.argmax(q_values)
+#     # Sort the Q-values to get the indices of actions (activities) with the highest Q-values
+#     sorted_indices = np.argsort(q_values)[::-1][:num_recommendations]
     
-#     # Map the action index to activity type and genre
-#     if action_index < len(music_genres):
-#         activity_type = 'music'
-#         selected_genre = music_genres[action_index]
-#     elif action_index < len(music_genres) + len(book_genres):
-#         activity_type = 'books'
-#         selected_genre = book_genres[action_index - len(music_genres)]
-#     else:
-#         activity_type = 'movies'
-#         selected_genre = movie_genres[action_index - len(music_genres) - len(book_genres)]
+#     recommended_activities = []
+#     for index in sorted_indices:
+#         # Map the action index to activity type and genre
+#         if index < len(music_genres):
+#             activity_type = 'music'
+#             selected_genre = music_genres[index]
+#         elif index < len(music_genres) + len(book_genres):
+#             activity_type = 'books'
+#             selected_genre = book_genres[index - len(music_genres)]
+#         else:
+#             activity_type = 'movies'
+#             selected_genre = movie_genres[index - len(music_genres) - len(book_genres)]
+        
+#         recommended_activities.append((activity_type, selected_genre))
     
-#     return activity_type, selected_genre
+#     return recommended_activities
 
 # # Example usage
 # current_state = 10  # Example current state
-# activity_type, selected_genre = recommend_activity(Q_table, current_state, music_genres, book_genres, movie_genres)
-# print("Recommended Activity Type:", activity_type)
-# print("Recommended Genre:", selected_genre)
+# recommended_activities = recommend_activities(Q_table, current_state, music_genres, book_genres, movie_genres, num_recommendations=6)
+# print("Recommended Activities:")
+# for index, activity in enumerate(recommended_activities, 1):
+#     print(f"{index}. Activity Type: {activity[0]}, Genre: {activity[1]}")
 
 
-def recommend_activities(Q_table, current_state, music_genres, book_genres, movie_genres, num_recommendations=6):
+def recommend_activities(Q_table, current_state, music_df, book_df, movie_df, num_recommendations=6):
     # Retrieve Q-values for the current state
     q_values = Q_table[current_state]
     
@@ -221,25 +225,36 @@ def recommend_activities(Q_table, current_state, music_genres, book_genres, movi
     sorted_indices = np.argsort(q_values)[::-1][:num_recommendations]
     
     recommended_activities = []
+    recommended_names = set()  # To keep track of recommended names
+    
     for index in sorted_indices:
         # Map the action index to activity type and genre
-        if index < len(music_genres):
+        if index < len(music_actions):
             activity_type = 'music'
-            selected_genre = music_genres[index]
-        elif index < len(music_genres) + len(book_genres):
+            selected_genre = music_actions[index].split()[-1]
+            recommendations = music_df[music_df['genre'].str.contains(selected_genre, case=False)]['name'].tolist()
+        elif index < len(music_actions) + len(book_actions):
             activity_type = 'books'
-            selected_genre = book_genres[index - len(music_genres)]
+            selected_genre = book_actions[index - len(music_actions)].split()[-1]
+            recommendations = book_df[book_df['genre'].str.contains(selected_genre, case=False)]['name'].tolist()
         else:
             activity_type = 'movies'
-            selected_genre = movie_genres[index - len(music_genres) - len(book_genres)]
+            selected_genre = movie_actions[index - len(music_actions) - len(book_actions)].split()[-1]
+            recommendations = movie_df[movie_df['genre'].str.contains(selected_genre, case=False)]['name'].tolist()
         
-        recommended_activities.append((activity_type, selected_genre))
+        # Select only one recommendation for each category if available and not already recommended
+        if recommendations:
+            for recommendation in recommendations:
+                if recommendation not in recommended_names:
+                    recommended_activities.append((activity_type, selected_genre, recommendation))
+                    recommended_names.add(recommendation)
+                    break  # Break after adding one recommendation to avoid repetition
     
     return recommended_activities
 
 # Example usage
 current_state = 10  # Example current state
-recommended_activities = recommend_activities(Q_table, current_state, music_genres, book_genres, movie_genres, num_recommendations=6)
+recommended_activities = recommend_activities(Q_table, current_state, music_df, book_df, movie_df, num_recommendations=6)
 print("Recommended Activities:")
 for index, activity in enumerate(recommended_activities, 1):
-    print(f"{index}. Activity Type: {activity[0]}, Genre: {activity[1]}")
+    print(f"{index}. Activity Type: {activity[0]}, Genre: {activity[1]}, Recommendation: {activity[2]}")
