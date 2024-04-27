@@ -100,69 +100,6 @@ print("Relevant activity type:", activity_type)
 print("Genre of the selected activity:", selected_genre)
 
 
-
-
-# Define the Q-learning agent class
-class QLearningAgent:
-    def __init__(self, actions, learning_rate=0.1, discount_factor=0.9, epsilon=0.1):
-        self.actions = actions
-        self.learning_rate = learning_rate
-        self.discount_factor = discount_factor
-        self.epsilon = epsilon
-        self.q_table = {}
-
-    def get_action(self, state):
-        if np.random.rand() < self.epsilon:
-            return np.random.choice(self.actions)
-        else:
-            if state in self.q_table:
-                return max(self.q_table[state], key=self.q_table[state].get)
-            else:
-                return np.random.choice(self.actions)
-
-    def update_q_value(self, state, action, reward, next_state):
-        if state not in self.q_table:
-            self.q_table[state] = {action: 0 for action in self.actions}
-        if next_state not in self.q_table:
-            self.q_table[next_state] = {action: 0 for action in self.actions}
-
-        max_next_action = max(self.q_table[next_state], key=self.q_table[next_state].get)
-        self.q_table[state][action] += self.learning_rate * (
-                reward + self.discount_factor * self.q_table[next_state][max_next_action] - self.q_table[state][action])
-
-
-# Define reward function
-def get_reward(feedback):
-    if feedback == 'thumbs_up':
-        return 5
-    elif feedback == 'thumbs_down':
-        return -5
-    elif feedback == 'skip':
-        return -2
-    else:
-        return -0
-
-
-
-# Define states
-num_states = 100  # Number of possible states
-states = range(num_states)
-
-# Initialize Q-table with zeros
-Q = np.zeros((len(states), len(actions)))
-
-# Define learning parameters
-alpha = 0.1  # Learning rate
-gamma = 0.9  # Discount factor
-
-
-# Q-learning algorithm
-def q_learning(state, action_index, reward, next_state):
-    next_action_index = np.argmax(Q[next_state])
-    Q[state][action_index] += alpha * (reward + gamma * Q[next_state][next_action_index] - Q[state][action_index])
-
-
-
 def get_action_index(activity_type, selected_genre):
     if activity_type == 'music':
         action = f"Select Music {selected_genre}"
@@ -180,25 +117,123 @@ def get_action_index(activity_type, selected_genre):
 
 # Example usage
 action_index = get_action_index(activity_type, selected_genre)
-if action_index is not None:
-    print("Action index:", action_index)
-else:
-    print("No action found for the given activity type and genre.")
+
+# # Define the environment
+# n_states = 100  # Number of states in the grid world
+# n_actions = 36  # Number of possible actions (up, down, left, right)
+# goal_state = 99  # Goal state
+
+# # Initialize Q-table with zeros
+# Q_table = np.zeros((n_states, n_actions))
+
+# # Define parameters
+# learning_rate = 0.8
+# discount_factor = 0.95
+# exploration_prob = 0.2
+# epochs = 1000
 
 
+# # Q-learning algorithm
+# for epoch in range(epochs):
+#     current_state = np.random.randint(0, n_states)  # Start from a random state
+
+#     while current_state != goal_state:
+#         # Choose action with epsilon-greedy strategy
+#         if np.random.rand() < exploration_prob:
+#             action = np.random.randint(0, n_actions)  # Explore
+#         else:
+#             action = np.argmax(Q_table[current_state])  # Exploit
+
+#         # Simulate the environment (move to the next state)
+#         # For simplicity, move to the next state
+#         next_state = (current_state + 1) % n_states
+
+#         # Define a simple reward function (1 if the goal state is reached, 0 otherwise)
+#         reward = 1 if next_state == goal_state else 0
+
+#         # Update Q-value using the Q-learning update rule
+#         Q_table[current_state, action] += learning_rate * \
+#             (reward + discount_factor *
+#              np.max(Q_table[next_state]) - Q_table[current_state, action])
+
+#         current_state = next_state  # Move to the next state
+
+# # After training, the Q-table represents the learned Q-values
+# print("Learned Q-table:")
+# print(Q_table)
+
+
+
+# Define the environment
+n_states = 100  # Number of states in the grid world
+n_actions = 36  # Number of possible actions (up, down, left, right)
+
+# Initialize Q-table with zeros
+Q_table = np.zeros((n_states, n_actions))
+
+# Define parameters
+learning_rate = 0.8
+discount_factor = 0.95
+exploration_prob = 0.2
+epochs = 1000  # Number of training epochs
+
+# Q-learning algorithm
+for epoch in range(epochs):
+    current_state = np.random.randint(0, n_states)  # Start from a random state
+
+    while True:  # Continue until convergence
+        # Choose action with epsilon-greedy strategy
+        if np.random.rand() < exploration_prob:
+            action = np.random.randint(0, n_actions)  # Explore
+        else:
+            action = np.argmax(Q_table[current_state])  # Exploit
+
+        # Simulate the environment (move to the next state)
+        # For simplicity, move to the next state
+        next_state = (current_state + 1) % n_states
+
+        # Define a simple reward function (1 if the epoch ends, 0 otherwise)
+        # Here, the epoch ends when the loop reaches the maximum state
+        reward = 1 if next_state == n_states - 1 else 0
+
+        # Update Q-value using the Q-learning update rule
+        Q_table[current_state, action] += learning_rate * \
+            (reward + discount_factor *
+             np.max(Q_table[next_state]) - Q_table[current_state, action])
+
+        if reward == 1:  # Break if epoch ends
+            break
+
+        current_state = next_state  # Move to the next state
+
+# After training, the Q-table represents the learned Q-values
+print("Learned Q-table:")
+print(Q_table)
+
+
+
+def recommend_activity(Q_table, current_state, music_genres, book_genres, movie_genres):
+    # Retrieve Q-values for the current state
+    q_values = Q_table[current_state]
+    
+    # Find the index of the action (activity) with the highest Q-value
+    action_index = np.argmax(q_values)
+    
+    # Map the action index to activity type and genre
+    if action_index < len(music_genres):
+        activity_type = 'music'
+        selected_genre = music_genres[action_index]
+    elif action_index < len(music_genres) + len(book_genres):
+        activity_type = 'books'
+        selected_genre = book_genres[action_index - len(music_genres)]
+    else:
+        activity_type = 'movies'
+        selected_genre = movie_genres[action_index - len(music_genres) - len(book_genres)]
+    
+    return activity_type, selected_genre
 
 # Example usage
-# Simulate user feedback
-state = 0  # Initial state
-# action_index = 4  # Example action index (Select Music Genre4)
-reward = get_reward('thumbs_up')  # Example reward for thumbs up
-next_state = 1  # Next state after user interaction
-
-# Update Q-values based on feedback
-q_learning(state, action_index, reward, next_state)
-
-# Recommend next action based on Q-values for the next state
-next_state = 1  # Example next state
-next_action_index = np.argmax(Q[next_state])
-next_action = actions[next_action_index]
-print("Next recommended action:", next_action)
+current_state = 10  # Example current state
+activity_type, selected_genre = recommend_activity(Q_table, current_state, music_genres, book_genres, movie_genres)
+print("Recommended Activity Type:", activity_type)
+print("Recommended Genre:", selected_genre)
