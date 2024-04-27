@@ -2,6 +2,19 @@ import pandas as pd
 import numpy as np
 
 
+
+music_genres = ['alternative', 'blues', 'dance', 'electro', 'electronic', 'folk', 'indie', 'metal', 'new-age', 'pop', 'rock', 'soul', 'world-music']
+book_genres = ['Romance', 'Travel','Music', 'Poetry', 'Fantasy', 'Historical Fiction', 'Thriller', 'Science Fiction', 'Comics', 'Horror']
+movie_genres = ['Family', 'Drama', 'Romance', 'Travel','Musical', 'Fantasy', 'History', 'Action','Sci-Fi', 'Thriller', 'Comedy', 'Adventure', 'Horror']
+
+music_actions = ['Select Music ' + genre for genre in music_genres]
+book_actions = ['Select Book ' + genre for genre in book_genres]
+movie_actions = ['Select Movie ' + genre for genre in movie_genres]
+
+actions = music_actions + book_actions + movie_actions
+# print(len(actions))
+
+
 def get_user_preferences():
     preferences = {}
     mental_states = ['Happy', 'Sad', 'Frustration', 'Neutral']
@@ -79,7 +92,9 @@ def get_relevant_activity(user_preferences, selection, df1, df2, df3):
     return None, None
 
 # Example usage
-selection = 'Daddy Issues'  # Example user selection
+# selection = 'Dracula: Dead and Loving It (1995)'  # Example user selection
+# selection = 'Four Rooms (1995)'
+selection = 'Whisperwood'
 activity_type, selected_genre = get_relevant_activity(user_preferences, selection, music_df, book_df, movie_df)
 print("Relevant activity type:", activity_type)
 print("Genre of the selected activity:", selected_genre)
@@ -128,17 +143,6 @@ def get_reward(feedback):
         return -0
 
 
-music_genres = ['alternative', 'blues', 'dance', 'electro', 'electronic', 'folk', 'indie', 'metal', 'new-age', 'pop', 'rock', 'soul', 'world-music']
-book_genres = ['Romance', 'Travel','Music', 'Poetry', 'Fantasy', 'Historical Fiction', 'Thriller', 'Science Fiction', 'Comics', 'Horror']
-movie_genres = ['Family', 'Drama', 'Romance', 'Travel','Musical', 'Fantasy', 'History', 'Action','Sci-Fi', 'Thriller', 'Comedy', 'Adventure', 'Horror']
-
-music_actions = ['Select Music ' + genre for genre in music_genres]
-book_actions = ['Select Book ' + genre for genre in book_genres]
-movie_actions = ['Select Movie ' + genre for genre in movie_genres]
-
-actions = music_actions + book_actions + movie_actions
-# print(len(actions))
-
 
 # Define states
 num_states = 100  # Number of possible states
@@ -151,16 +155,6 @@ Q = np.zeros((len(states), len(actions)))
 alpha = 0.1  # Learning rate
 gamma = 0.9  # Discount factor
 
-# Define reward function
-def get_reward(feedback):
-    if feedback == 'thumbs_up':
-        return 5
-    elif feedback == 'thumbs_down':
-        return -5
-    elif feedback == 'skip':
-        return -2
-    else:
-        return 0
 
 # Q-learning algorithm
 def q_learning(state, action_index, reward, next_state):
@@ -169,18 +163,63 @@ def q_learning(state, action_index, reward, next_state):
 
 # Example usage
 # Simulate user feedback
-state = 0  # Initial state
-action_index = 3  # Example action index (Select Music Genre4)
-reward = get_reward('thumbs_up')  # Example reward for thumbs up
-next_state = 1  # Next state after user interaction
+# state = 0  # Initial state
+# action_index = 4  # Example action index (Select Music Genre4)
+# reward = get_reward('thumbs_up')  # Example reward for thumbs up
+# next_state = 1  # Next state after user interaction
 
-# Update Q-values based on feedback
-q_learning(state, action_index, reward, next_state)
+# # Update Q-values based on feedback
+# q_learning(state, action_index, reward, next_state)
 
-# Recommend next action based on Q-values for the next state
-next_state = 1  # Example next state
-next_action_index = np.argmax(Q[next_state])
-next_action = actions[next_action_index]
-print("Next recommended action:", next_action)
+# # Recommend next action based on Q-values for the next state
+# next_state = 1  # Example next state
+# next_action_index = np.argmax(Q[next_state])
+# next_action = actions[next_action_index]
+# print("Next recommended action:", next_action)
 
 
+# def get_action_index(activity_type, selected_genre):
+#     if activity_type == 'music':
+#         action = f"Select Music {selected_genre}"
+#         if action in music_actions:
+#             return music_actions.index(action)
+#     elif activity_type == 'books':
+#         action = f"Select Book {selected_genre}"
+#         if action in book_actions:
+#             return len(music_actions) + book_actions.index(action)
+#     elif activity_type == 'movies':
+#         action = f"Select Movie {selected_genre}"
+#         if action in movie_actions:
+#             return len(music_actions) + len(book_actions) + movie_actions.index(action)
+#     return None
+
+# # Example usage
+# action_index = get_action_index(activity_type, selected_genre)
+# if action_index is not None:
+#     print("Action index:", action_index)
+# else:
+#     print("No action found for the given activity type and genre.")
+
+def get_action_index(activity_type, selected_genres):
+    for genres in selected_genres:
+        for genre in genres:
+            if activity_type == 'music':
+                action = f"Select Music {genre.strip()}"
+                if action in music_actions:
+                    return music_actions.index(action)
+            elif activity_type == 'books':
+                action = f"Select Book {genre.strip()}"
+                if action in book_actions:
+                    return len(music_actions) + book_actions.index(action)
+            elif activity_type == 'movies':
+                action = f"Select Movie {genre.strip()}"
+                if action in movie_actions:
+                    return len(music_actions) + len(book_actions) + movie_actions.index(action)
+    return None
+
+# Example usage
+action_index = get_action_index(activity_type, selected_genre)
+if action_index is not None:
+    print("Action index:", action_index)
+else:
+    print("No action found for the given activity type and genre.")
