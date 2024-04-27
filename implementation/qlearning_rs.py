@@ -92,9 +92,9 @@ def get_relevant_activity(user_preferences, selection, df1, df2, df3):
     return None, None
 
 # Example usage
-selection = 'Daddy Issues'  # Example user selection
+# selection = 'Daddy Issues'  # Example user selection
 # selection = 'Four Rooms (1995)'
-# selection = 'Whisperwood'
+selection = 'Jumanji (1995)'
 activity_type, selected_genre = get_relevant_activity(user_preferences, selection, music_df, book_df, movie_df)
 print("Relevant activity type:", activity_type)
 print("Genre of the selected activity:", selected_genre)
@@ -118,52 +118,20 @@ def get_action_index(activity_type, selected_genre):
 # Example usage
 action_index = get_action_index(activity_type, selected_genre)
 
-# # Define the environment
-# n_states = 100  # Number of states in the grid world
-# n_actions = 36  # Number of possible actions (up, down, left, right)
-# goal_state = 99  # Goal state
-
-# # Initialize Q-table with zeros
-# Q_table = np.zeros((n_states, n_actions))
-
-# # Define parameters
-# learning_rate = 0.8
-# discount_factor = 0.95
-# exploration_prob = 0.2
-# epochs = 1000
-
-
-# # Q-learning algorithm
-# for epoch in range(epochs):
-#     current_state = np.random.randint(0, n_states)  # Start from a random state
-
-#     while current_state != goal_state:
-#         # Choose action with epsilon-greedy strategy
-#         if np.random.rand() < exploration_prob:
-#             action = np.random.randint(0, n_actions)  # Explore
-#         else:
-#             action = np.argmax(Q_table[current_state])  # Exploit
-
-#         # Simulate the environment (move to the next state)
-#         # For simplicity, move to the next state
-#         next_state = (current_state + 1) % n_states
-
-#         # Define a simple reward function (1 if the goal state is reached, 0 otherwise)
-#         reward = 1 if next_state == goal_state else 0
-
-#         # Update Q-value using the Q-learning update rule
-#         Q_table[current_state, action] += learning_rate * \
-#             (reward + discount_factor *
-#              np.max(Q_table[next_state]) - Q_table[current_state, action])
-
-#         current_state = next_state  # Move to the next state
-
-# # After training, the Q-table represents the learned Q-values
-# print("Learned Q-table:")
-# print(Q_table)
 
 
 
+# Define reward function
+def get_reward(feedback):
+    if feedback == 'thumbs_up':
+        return 5
+    elif feedback == 'thumbs_down':
+        return -5
+    elif feedback == 'skip':
+        return -2
+    else:
+        return 0
+    
 # Define the environment
 n_states = 100  # Number of states in the grid world
 n_actions = 36  # Number of possible actions (up, down, left, right)
@@ -194,14 +162,20 @@ for epoch in range(epochs):
 
         # Define a simple reward function (1 if the epoch ends, 0 otherwise)
         # Here, the epoch ends when the loop reaches the maximum state
-        reward = 1 if next_state == n_states - 1 else 0
+        feedback = 'thumbs_up' if np.random.rand() < 0.8 else 'thumbs_down'  # Example performance
+
+
+        # Get the reward based on the feedback
+        reward = get_reward(feedback)
 
         # Update Q-value using the Q-learning update rule
         Q_table[current_state, action] += learning_rate * \
             (reward + discount_factor *
              np.max(Q_table[next_state]) - Q_table[current_state, action])
 
-        if reward == 1:  # Break if epoch ends
+        # if reward == 5:  # Break if epoch ends
+        #     break
+        if feedback == 'thumbs_up' or feedback == 'thumbs_down':
             break
 
         current_state = next_state  # Move to the next state
@@ -212,28 +186,60 @@ print(Q_table)
 
 
 
-def recommend_activity(Q_table, current_state, music_genres, book_genres, movie_genres):
+# def recommend_activity(Q_table, current_state, music_genres, book_genres, movie_genres):
+#     # Retrieve Q-values for the current state
+#     q_values = Q_table[current_state]
+    
+#     # Find the index of the action (activity) with the highest Q-value
+#     action_index = np.argmax(q_values)
+    
+#     # Map the action index to activity type and genre
+#     if action_index < len(music_genres):
+#         activity_type = 'music'
+#         selected_genre = music_genres[action_index]
+#     elif action_index < len(music_genres) + len(book_genres):
+#         activity_type = 'books'
+#         selected_genre = book_genres[action_index - len(music_genres)]
+#     else:
+#         activity_type = 'movies'
+#         selected_genre = movie_genres[action_index - len(music_genres) - len(book_genres)]
+    
+#     return activity_type, selected_genre
+
+# # Example usage
+# current_state = 10  # Example current state
+# activity_type, selected_genre = recommend_activity(Q_table, current_state, music_genres, book_genres, movie_genres)
+# print("Recommended Activity Type:", activity_type)
+# print("Recommended Genre:", selected_genre)
+
+
+def recommend_activities(Q_table, current_state, music_genres, book_genres, movie_genres, num_recommendations=6):
     # Retrieve Q-values for the current state
     q_values = Q_table[current_state]
     
-    # Find the index of the action (activity) with the highest Q-value
-    action_index = np.argmax(q_values)
+    # Sort the Q-values to get the indices of actions (activities) with the highest Q-values
+    sorted_indices = np.argsort(q_values)[::-1][:num_recommendations]
     
-    # Map the action index to activity type and genre
-    if action_index < len(music_genres):
-        activity_type = 'music'
-        selected_genre = music_genres[action_index]
-    elif action_index < len(music_genres) + len(book_genres):
-        activity_type = 'books'
-        selected_genre = book_genres[action_index - len(music_genres)]
-    else:
-        activity_type = 'movies'
-        selected_genre = movie_genres[action_index - len(music_genres) - len(book_genres)]
+    recommended_activities = []
+    for index in sorted_indices:
+        # Map the action index to activity type and genre
+        if index < len(music_genres):
+            activity_type = 'music'
+            selected_genre = music_genres[index]
+        elif index < len(music_genres) + len(book_genres):
+            activity_type = 'books'
+            selected_genre = book_genres[index - len(music_genres)]
+        else:
+            activity_type = 'movies'
+            selected_genre = movie_genres[index - len(music_genres) - len(book_genres)]
+        
+        recommended_activities.append((activity_type, selected_genre))
     
-    return activity_type, selected_genre
+    return recommended_activities
 
 # Example usage
 current_state = 10  # Example current state
-activity_type, selected_genre = recommend_activity(Q_table, current_state, music_genres, book_genres, movie_genres)
-print("Recommended Activity Type:", activity_type)
-print("Recommended Genre:", selected_genre)
+recommended_activities = recommend_activities(Q_table, current_state, music_genres, book_genres, movie_genres, num_recommendations=6)
+print("Recommended Activities:")
+for index, activity in enumerate(recommended_activities, 1):
+    print(f"{index}. Activity Type: {activity[0]}, Genre: {activity[1]}")
