@@ -140,7 +140,7 @@ def get_reward(feedback):
     elif feedback == 'skip':
         return -2
     else:
-        return -0
+        return 0
 
 
 
