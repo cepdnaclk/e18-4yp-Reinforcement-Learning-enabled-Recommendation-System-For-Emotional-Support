@@ -92,9 +92,9 @@ def get_relevant_activity(user_preferences, selection, df1, df2, df3):
     return None, None
 
 # Example usage
-selection = 'Daddy Issues'  # Example user selection
+# selection = 'Daddy Issues'  # Example user selection
 # selection = 'Four Rooms (1995)'
-# selection = 'Whisperwood'
+selection = 'Jumanji (1995)'
 activity_type, selected_genre = get_relevant_activity(user_preferences, selection, music_df, book_df, movie_df)
 print("Relevant activity type:", activity_type)
 print("Genre of the selected activity:", selected_genre)
@@ -186,30 +186,60 @@ print(Q_table)
 
 
 
-def recommend_activity(Q_table, current_state, music_genres, book_genres, movie_genres):
+# def recommend_activity(Q_table, current_state, music_genres, book_genres, movie_genres):
+#     # Retrieve Q-values for the current state
+#     q_values = Q_table[current_state]
+    
+#     # Find the index of the action (activity) with the highest Q-value
+#     action_index = np.argmax(q_values)
+    
+#     # Map the action index to activity type and genre
+#     if action_index < len(music_genres):
+#         activity_type = 'music'
+#         selected_genre = music_genres[action_index]
+#     elif action_index < len(music_genres) + len(book_genres):
+#         activity_type = 'books'
+#         selected_genre = book_genres[action_index - len(music_genres)]
+#     else:
+#         activity_type = 'movies'
+#         selected_genre = movie_genres[action_index - len(music_genres) - len(book_genres)]
+    
+#     return activity_type, selected_genre
+
+# # Example usage
+# current_state = 10  # Example current state
+# activity_type, selected_genre = recommend_activity(Q_table, current_state, music_genres, book_genres, movie_genres)
+# print("Recommended Activity Type:", activity_type)
+# print("Recommended Genre:", selected_genre)
+
+
+def recommend_activities(Q_table, current_state, music_genres, book_genres, movie_genres, num_recommendations=6):
     # Retrieve Q-values for the current state
     q_values = Q_table[current_state]
     
-    # Find the index of the action (activity) with the highest Q-value
-    action_index = np.argmax(q_values)
+    # Sort the Q-values to get the indices of actions (activities) with the highest Q-values
+    sorted_indices = np.argsort(q_values)[::-1][:num_recommendations]
     
-    # Map the action index to activity type and genre
-    if action_index < len(music_genres):
-        activity_type = 'music'
-        selected_genre = music_genres[action_index]
-    elif action_index < len(music_genres) + len(book_genres):
-        activity_type = 'books'
-        selected_genre = book_genres[action_index - len(music_genres)]
-    else:
-        activity_type = 'movies'
-        selected_genre = movie_genres[action_index - len(music_genres) - len(book_genres)]
+    recommended_activities = []
+    for index in sorted_indices:
+        # Map the action index to activity type and genre
+        if index < len(music_genres):
+            activity_type = 'music'
+            selected_genre = music_genres[index]
+        elif index < len(music_genres) + len(book_genres):
+            activity_type = 'books'
+            selected_genre = book_genres[index - len(music_genres)]
+        else:
+            activity_type = 'movies'
+            selected_genre = movie_genres[index - len(music_genres) - len(book_genres)]
+        
+        recommended_activities.append((activity_type, selected_genre))
     
-    return activity_type, selected_genre
+    return recommended_activities
 
 # Example usage
 current_state = 10  # Example current state
-activity_type, selected_genre = recommend_activity(Q_table, current_state, music_genres, book_genres, movie_genres)
-print("Recommended Activity Type:", activity_type)
-print("Recommended Genre:", selected_genre)
-
-
+recommended_activities = recommend_activities(Q_table, current_state, music_genres, book_genres, movie_genres, num_recommendations=6)
+print("Recommended Activities:")
+for index, activity in enumerate(recommended_activities, 1):
+    print(f"{index}. Activity Type: {activity[0]}, Genre: {activity[1]}")
