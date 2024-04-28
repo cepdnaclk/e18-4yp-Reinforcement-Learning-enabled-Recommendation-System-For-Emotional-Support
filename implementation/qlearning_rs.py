@@ -297,53 +297,6 @@ def recommend_and_get_feedback(Q_table, current_state, music_df, book_df, movie_
     
     return recommended_activities, user_feedback
 
-# Example usage
-# current_state = 10  # Example current state
-# previous_recommendations = None
-# while True:
-#     recommended_activities, user_feedback = recommend_and_get_feedback(Q_table, current_state, music_df, book_df, movie_df, num_recommendations=6, previous_recommendations=previous_recommendations)
-#     if user_feedback != 'skip':
-#         break
-#     # Update previous recommendations
-#     previous_recommendations = [activity[2] for activity in recommended_activities]
-
-# # Update Q-values based on user feedback
-# for index, activity in enumerate(recommended_activities, 1):
-#     action_index = get_action_index(activity[0], activity[1])
-#     reward = get_reward(user_feedback)
-#     if index == user_feedback:
-#         Q_table[current_state, action_index] += learning_rate * (reward - Q_table[current_state, action_index])
-#     else:
-#         Q_table[current_state, action_index] += learning_rate * (-2 - Q_table[current_state, action_index])
-
-
-# current_state = 10  # Example current state
-# previous_recommendations = None
-# while True:
-#     recommended_activities, user_feedback = recommend_and_get_feedback(Q_table, current_state, music_df, book_df, movie_df, num_recommendations=6, previous_recommendations=previous_recommendations)
-#     if user_feedback != 'skip':
-#         # Update previous recommendations
-#         previous_recommendations = [activity[2] for activity in recommended_activities]
-        
-#         # Update Q-values based on user feedback
-#         for index, activity in enumerate(recommended_activities, 1):
-#             action_index = get_action_index(activity[0], activity[1])
-#             reward = get_reward(user_feedback)
-#             if index == user_feedback:
-#                 Q_table[current_state, action_index] += learning_rate * (reward - Q_table[current_state, action_index])
-#             else:
-#                 Q_table[current_state, action_index] += learning_rate * (-2 - Q_table[current_state, action_index])
-#     else:
-#         # Skip action, no need to update Q-values
-#         previous_recommendations = None
-
-#     # Check if the loop should continue (e.g., user feedback is not 'skip')
-#     if user_feedback != 'skip':
-#         # Continue providing recommendations
-#         continue
-#     else:
-#         # Break the loop if user skips
-#         break
 
 
 current_state = 10  # Example current state
