@@ -162,7 +162,7 @@ for epoch in range(epochs):
 
         # Define a simple reward function (1 if the epoch ends, 0 otherwise)
         # Here, the epoch ends when the loop reaches the maximum state
-        feedback = 'thumbs_up' if np.random.rand() < 0.8 else 'thumbs_down'  # Example performance
+        feedback = 'thumbs_up' if np.random.rand() < 0.7 else 'thumbs_down'  # Example performance
 
 
         # Get the reward based on the feedback
@@ -184,37 +184,6 @@ for epoch in range(epochs):
 print("Learned Q-table:")
 print(Q_table)
 
-
-# def recommend_activities(Q_table, current_state, music_genres, book_genres, movie_genres, num_recommendations=6):
-#     # Retrieve Q-values for the current state
-#     q_values = Q_table[current_state]
-    
-#     # Sort the Q-values to get the indices of actions (activities) with the highest Q-values
-#     sorted_indices = np.argsort(q_values)[::-1][:num_recommendations]
-    
-#     recommended_activities = []
-#     for index in sorted_indices:
-#         # Map the action index to activity type and genre
-#         if index < len(music_genres):
-#             activity_type = 'music'
-#             selected_genre = music_genres[index]
-#         elif index < len(music_genres) + len(book_genres):
-#             activity_type = 'books'
-#             selected_genre = book_genres[index - len(music_genres)]
-#         else:
-#             activity_type = 'movies'
-#             selected_genre = movie_genres[index - len(music_genres) - len(book_genres)]
-        
-#         recommended_activities.append((activity_type, selected_genre))
-    
-#     return recommended_activities
-
-# # Example usage
-# current_state = 10  # Example current state
-# recommended_activities = recommend_activities(Q_table, current_state, music_genres, book_genres, movie_genres, num_recommendations=6)
-# print("Recommended Activities:")
-# for index, activity in enumerate(recommended_activities, 1):
-#     print(f"{index}. Activity Type: {activity[0]}, Genre: {activity[1]}")
 
 
 def recommend_activities(Q_table, current_state, music_df, book_df, movie_df, num_recommendations=6):
@@ -253,8 +222,161 @@ def recommend_activities(Q_table, current_state, music_df, book_df, movie_df, nu
     return recommended_activities
 
 # Example usage
+# current_state = 10  # Example current state
+# recommended_activities = recommend_activities(Q_table, current_state, music_df, book_df, movie_df, num_recommendations=6)
+# print("Recommended Activities:")
+# for index, activity in enumerate(recommended_activities, 1):
+#     print(f"{index}. Activity Type: {activity[0]}, Genre: {activity[1]}, Recommendation: {activity[2]}")
+
+def user_interaction(recommended_activities):
+    print("Here are some recommended activities:")
+    for index, activity in enumerate(recommended_activities, 1):
+        print(f"{index}. Activity Type: {activity[0]}, Genre: {activity[1]}, Recommendation: {activity[2]}")
+    
+    while True:
+        try:
+            selection = int(input("Enter the number corresponding to your choice (1-6) or 0 to skip: "))
+            if selection < 0 or selection > 6:
+                raise ValueError
+            break
+        except ValueError:
+            print("Invalid input. Please enter a number between 1 and 6 or 0 to skip.")
+    
+    if selection == 0:
+        return 'skip'
+    else:
+        feedback = input("Did you like the recommendation? (thumbs_up/thumbs_down): ")
+        return feedback
+
+
+def recommend_activities(Q_table, current_state, music_df, book_df, movie_df, num_recommendations=6, previous_recommendations=None):
+    # Retrieve Q-values for the current state
+    q_values = Q_table[current_state]
+    
+    # Sort the Q-values to get the indices of actions (activities) with the highest Q-values
+    sorted_indices = np.argsort(q_values)[::-1][:num_recommendations]
+    
+    recommended_activities = []
+    recommended_names = set()  # To keep track of recommended names
+    
+    for index in sorted_indices:
+        # Map the action index to activity type and genre
+        if index < len(music_actions):
+            activity_type = 'music'
+            selected_genre = music_actions[index].split()[-1]
+            recommendations = music_df[music_df['genre'].str.contains(selected_genre, case=False)]['name'].tolist()
+        elif index < len(music_actions) + len(book_actions):
+            activity_type = 'books'
+            selected_genre = book_actions[index - len(music_actions)].split()[-1]
+            recommendations = book_df[book_df['genre'].str.contains(selected_genre, case=False)]['name'].tolist()
+        else:
+            activity_type = 'movies'
+            selected_genre = movie_actions[index - len(music_actions) - len(book_actions)].split()[-1]
+            recommendations = movie_df[movie_df['genre'].str.contains(selected_genre, case=False)]['name'].tolist()
+        
+        # Exclude previous recommendations
+        if previous_recommendations:
+            recommendations = [activity for activity in recommendations if activity not in previous_recommendations]
+        
+        # Select only one recommendation for each category if available and not already recommended
+        if recommendations:
+            for recommendation in recommendations:
+                if recommendation not in recommended_names:
+                    recommended_activities.append((activity_type, selected_genre, recommendation))
+                    recommended_names.add(recommendation)
+                    break  # Break after adding one recommendation to avoid repetition
+    
+    return recommended_activities
+
+def recommend_and_get_feedback(Q_table, current_state, music_df, book_df, movie_df, num_recommendations=6, previous_recommendations=None):
+    # Recommend activities
+    recommended_activities = recommend_activities(Q_table, current_state, music_df, book_df, movie_df, num_recommendations, previous_recommendations)
+    
+    # Get user feedback
+    user_feedback = user_interaction(recommended_activities)
+    
+    return recommended_activities, user_feedback
+
+# Example usage
+# current_state = 10  # Example current state
+# previous_recommendations = None
+# while True:
+#     recommended_activities, user_feedback = recommend_and_get_feedback(Q_table, current_state, music_df, book_df, movie_df, num_recommendations=6, previous_recommendations=previous_recommendations)
+#     if user_feedback != 'skip':
+#         break
+#     # Update previous recommendations
+#     previous_recommendations = [activity[2] for activity in recommended_activities]
+
+# # Update Q-values based on user feedback
+# for index, activity in enumerate(recommended_activities, 1):
+#     action_index = get_action_index(activity[0], activity[1])
+#     reward = get_reward(user_feedback)
+#     if index == user_feedback:
+#         Q_table[current_state, action_index] += learning_rate * (reward - Q_table[current_state, action_index])
+#     else:
+#         Q_table[current_state, action_index] += learning_rate * (-2 - Q_table[current_state, action_index])
+
+
+# current_state = 10  # Example current state
+# previous_recommendations = None
+# while True:
+#     recommended_activities, user_feedback = recommend_and_get_feedback(Q_table, current_state, music_df, book_df, movie_df, num_recommendations=6, previous_recommendations=previous_recommendations)
+#     if user_feedback != 'skip':
+#         # Update previous recommendations
+#         previous_recommendations = [activity[2] for activity in recommended_activities]
+        
+#         # Update Q-values based on user feedback
+#         for index, activity in enumerate(recommended_activities, 1):
+#             action_index = get_action_index(activity[0], activity[1])
+#             reward = get_reward(user_feedback)
+#             if index == user_feedback:
+#                 Q_table[current_state, action_index] += learning_rate * (reward - Q_table[current_state, action_index])
+#             else:
+#                 Q_table[current_state, action_index] += learning_rate * (-2 - Q_table[current_state, action_index])
+#     else:
+#         # Skip action, no need to update Q-values
+#         previous_recommendations = None
+
+#     # Check if the loop should continue (e.g., user feedback is not 'skip')
+#     if user_feedback != 'skip':
+#         # Continue providing recommendations
+#         continue
+#     else:
+#         # Break the loop if user skips
+#         break
+
+
 current_state = 10  # Example current state
-recommended_activities = recommend_activities(Q_table, current_state, music_df, book_df, movie_df, num_recommendations=6)
-print("Recommended Activities:")
-for index, activity in enumerate(recommended_activities, 1):
-    print(f"{index}. Activity Type: {activity[0]}, Genre: {activity[1]}, Recommendation: {activity[2]}")
+previous_recommendations = None
+while True:
+    recommended_activities, user_feedback = recommend_and_get_feedback(Q_table, current_state, music_df, book_df, movie_df, num_recommendations=6, previous_recommendations=previous_recommendations)
+    if user_feedback != 'skip':
+        # Update previous recommendations
+        previous_recommendations = [activity[2] for activity in recommended_activities]
+        
+        # Update Q-values based on user feedback
+        for index, activity in enumerate(recommended_activities, 1):
+            action_index = get_action_index(activity[0], activity[1])
+            reward = get_reward(user_feedback)
+            if index == user_feedback:
+                # Increase Q-value for the selected action if feedback is thumbs_up
+                Q_table[current_state, action_index] += learning_rate * (reward - Q_table[current_state, action_index])
+                # If thumbs_up, adjust Q-values for the same type of activity to reinforce
+                for act_type, _, _ in recommended_activities:
+                    if act_type == activity[0]:
+                        action_idx = get_action_index(act_type, activity[1])
+                        Q_table[current_state, action_idx] += learning_rate * (reward - Q_table[current_state, action_idx])
+            else:
+                Q_table[current_state, action_index] += learning_rate * (-2 - Q_table[current_state, action_index])
+    else:
+        # Skip action, no need to update Q-values
+        previous_recommendations = None
+        continue
+
+    # Check if the loop should continue (e.g., user feedback is not 'skip')
+    if user_feedback != 'skip':
+        # Continue providing recommendations
+        continue
+    else:
+        # Break the loop if user skips
+        break
