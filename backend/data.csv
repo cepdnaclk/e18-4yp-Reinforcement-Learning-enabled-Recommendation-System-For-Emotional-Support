@@ -1,4 +1,4 @@
-user_id,user_name,password,email,mental_state,books_preferences,music_preferences,film_preferences,imm_book_sugg,imm_music_sugg,imm_movie_sugg
+user_id,username,password,email,mental_state,books_preferences,music_preferences,film_preferences,imm_book_sugg,imm_music_sugg,imm_movie_sugg
 0,nisalainduwara,gango99ns,nisalainduwara@gmail.com,happy,"['Mystery', 'Philosophy', 'Chick Lit']","['pop', 'dance', 'indie']","['Fantasy', 'Romance', 'Western']",,,
 0,nisalainduwara,gango99ns,nisalainduwara@gmail.com,sad,"['Philosophy', 'Art', 'Graphic Novels']","['electronic', 'alternative', 'dance']","['Western', 'Comedy', 'Adventure']",,,
 0,nisalainduwara,gango99ns,nisalainduwara@gmail.com,stressed,"['Nonfiction', 'Sports', 'Memoir']","['soul', 'metal', 'dance']","['Adventure', 'Fantasy', 'Children']",,,
@@ -4007,3 +4007,7 @@ user_id,user_name,password,email,mental_state,books_preferences,music_preference
 1001,induwara,induwara,induwara,relaxed,Comics,electronic,Western,,,
 1001,induwara,induwara,induwara,stressed,Science Fiction,blues,Children,,,
 1001,induwara,induwara,induwara,sad,Fiction,alternative,Adventure,,,
+1002,nimnadasd,nimnad,nim@gmail.com,happy,Science Fiction,dance,Children,,,
+1002,nimnadasd,nimnad,nim@gmail.com,relaxed,Fiction,alternative,Adventure,,,
+1002,nimnadasd,nimnad,nim@gmail.com,stressed,Classics,blues,Animation,,,
+1002,nimnadasd,nimnad,nim@gmail.com,sad,Historical Fiction,electro,Comedy,,,

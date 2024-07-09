@@ -19,6 +19,10 @@ class User(BaseModel):
     password: str
     preferences: dict
 
+class UserSignIn(BaseModel):
+    username: str
+    password: str
+
 
 def get_user_pref_network(df, user_id):
   user_row = df[(df["user_id"] == user_id)]
@@ -77,7 +81,7 @@ def get_similar_users(data, user_id, mental_state):
 
 def get_ego_suggestions(similar_users_high, data, mental_state):
   
-    data = pd.read_csv('D:\RS USING RL BRANDIT\data.csv')
+    data = pd.read_csv('backend\data.csv')
     data = data.fillna('')
 
     book_suggestions = []
@@ -144,12 +148,13 @@ def get_exploit_suggest(ego, usr, ratio):
 
 @app.post("/signup", status_code=status.HTTP_201_CREATED)
 def signup(user: User):
-
-    data = pd.read_csv('D:\RS USING RL BRANDIT\data.csv')
+    # print the json
+    print(user.dict())
+    data = pd.read_csv(r'backend\data.csv')
     data = data.fillna('')
 
-    if user.username in data['user_name'].values:
-        raise HTTPException(status_code=400, detail="user_name already exists")
+    if user.username in data['username'].values:
+        raise HTTPException(status_code=400, detail="username already exists")
 
     if user.email in data['email'].values:
         raise HTTPException(status_code=400, detail="Email already exists")
@@ -159,7 +164,7 @@ def signup(user: User):
 
     new_user_happy = {
         "user_id": user_id,
-        "user_name": user.username,
+        "username": user.username,
         "password": user.password,
         "email": user.email,
         "mental_state": 'happy',
@@ -170,7 +175,7 @@ def signup(user: User):
 
     new_user_relaxed = {
         "user_id": user_id,
-        "user_name": user.username,
+        "username": user.username,
         "password": user.password,
         "email": user.email,
         "mental_state": 'relaxed',
@@ -181,7 +186,7 @@ def signup(user: User):
 
     new_user_stressed = {
         "user_id": user_id,
-        "user_name": user.username,
+        "username": user.username,
         "password": user.password,
         "email": user.email,
         "mental_state": 'stressed',
@@ -192,7 +197,7 @@ def signup(user: User):
 
     new_user_sad = {
         "user_id": user_id,
-        "user_name": user.username,
+        "username": user.username,
         "password": user.password,
         "email": user.email,
         "mental_state": 'sad',
@@ -209,33 +214,32 @@ def signup(user: User):
 
     # Concatenate all DataFrames together
     data = pd.concat([data, df_happy, df_relaxed, df_stressed, df_sad], ignore_index=True)
-    data.to_csv('D:\RS USING RL BRANDIT\data.csv', index=False)
+    data.to_csv('backend\data.csv', index=False)
 
     return {"user_id": user_id, "username": str(user.username)}
 
 
 @app.post("/signin")
-def signin(user_name: str, password: str):
-
-    data = pd.read_csv('D:\RS USING RL BRANDIT\data.csv')
+def signin(user: UserSignIn):
+    data = pd.read_csv('backend/data.csv')
     data = data.fillna('')
     
-    user_data = data[(data['user_name'] == user_name) & (data['password'] == password)]
+    user_data = data[(data['username'] == user.username) & (data['password'] == user.password)]
 
-    if len(user_data) == 0:
-        raise HTTPException(status_code=400, detail="Invalid user_name or password")
+    if user_data.empty:
+        raise HTTPException(status_code=400, detail="Invalid username or password")
     else:
-        return {"user_id": int(user_data['user_id'][0]), "user_name": str(user_data['user_name'][0])}
+        user_info = user_data.iloc[0]
+        return {"user_id": int(user_info['user_id']), "username": str(user_info['username'])}
 
+@app.get("/get-suggestions")
+def get_suggestions(user_id: int, username: str, mental_state: str):
 
-@app.get("/get_suggestions")
-def get_suggestions(user_id: int, user_name: str, mental_state: str):
-
-    data = pd.read_csv(r'D:\RS USING RL BRANDIT\data.csv')
-    ratio = pd.read_csv(r'D:\RS USING RL BRANDIT\ratio.csv')
-    df_books = pd.read_csv(r'D:\RS USING RL BRANDIT\book_filtered_data.csv')
-    df_songs = pd.read_csv(r'D:\RS USING RL BRANDIT\music_filtered_data.csv')
-    df_movies = pd.read_csv(r'D:\RS USING RL BRANDIT\movie_filtered_data.csv')
+    data = pd.read_csv(r'backend\data.csv')
+    ratio = pd.read_csv(r'\data.csvratio.csv')
+    df_books = pd.read_csv(r'\data.csvbook_filtered_data.csv')
+    df_songs = pd.read_csv(r'\data.csvmusic_filtered_data.csv')
+    df_movies = pd.read_csv(r'\data.csvmovie_filtered_data.csv')
 
     book_ratio = int(ratio['book'].values[0])
     film_ratio = int(ratio['film'].values[0])
@@ -268,4 +272,4 @@ def get_suggestions(user_id: int, user_name: str, mental_state: str):
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="127.0.0.1", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=5000)
