@@ -151,7 +151,7 @@ Compare each character to match strings without the patterns.
 Selected Multi-Armed Bandit Model - Considering total reward accumulated over time
 
 ### Multi-Armed Bandit Model Comparison with and without Egocentric Network
-![models](./images/r5.png)
+![models](./images/r5new.png)
 
 ## Conclusion
 
