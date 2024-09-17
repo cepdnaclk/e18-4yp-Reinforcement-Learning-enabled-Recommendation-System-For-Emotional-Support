@@ -114,7 +114,7 @@ Integrating reinforcement learning and ego-centric networks, we are looking to d
 
 ## Experiments and Results
 
-# Egocentric Network Creation
+### Egocentric Network Creation
 
 1. Cosine similarity 
 Measures the cosine of the angle between two vectors, indicating similarity based on direction. 
@@ -129,12 +129,12 @@ Suitable for short descriptions or texts.
 Compare each character to match strings without the patterns. 
 
 
-#  RL Models
+###  RL Models
    ![models](./images/rlmodels.PNG)
 
 * Evaluation Metric - Accumulated Reward over Episodes
 
-# Accumulated Reward over Episodes Plots 
+### Accumulated Reward over Episodes Plots 
 
 1. Multi-Armed Bandit Model
  ![models](./images/bandit.PNG)
@@ -145,12 +145,12 @@ Compare each character to match strings without the patterns.
 3. Actor - Critic Model
 ![models](./images/actor.PNG)
 
-# Model Comparison over an Episode
+### Model Comparison over an Episode
 ![models](./images/final.PNG)
 
 Selected Multi-Armed Bandit Model - Considering total reward accumulated over time
 
-# Multi-Armed Bandit Model Comparison with and without Egocentric Network
+### Multi-Armed Bandit Model Comparison with and without Egocentric Network
 ![models](./images/r5.png)
 
 ## Conclusion
