@@ -30,7 +30,7 @@ title: Reinforcement Learning Enabled Egocentric Social Network Based Activity R
 4. [Related works](#related-works)
 5. [Methodology](#methodology)
 6. [Implementations](#experiment-setup-and-implementation)
-7. [Results and Analysis](#results-and-analysis)
+7. [Experiments and Results](#results-and-analysis)
 8. [Conclusion](#conclusion)
 9. [Publications](#publications)
 10. [Links](#links)
@@ -112,6 +112,56 @@ Integrating reinforcement learning and ego-centric networks, we are looking to d
    - The system continuously learns and updates recommendations based on user feedback.
    - User interactions and preferences provide valuable data to improve the system's recommendations.
 
+## Experiments and Results
+
+# Egocentric Network Creation
+
+1. Cosine similarity 
+Measures the cosine of the angle between two vectors, indicating similarity based on direction. 
+
+2. Fuzzy matching
+Use Levenshtein distance to compare each character in the two lists. 
+
+
+Selected fuzzy matching method over cosine similarity.
+
+Suitable for short descriptions or texts. 
+Compare each character to match strings without the patterns. 
+
+
+#  RL Models
+   ![models](./images/rlmodels.PNG)
+
+* Evaluation Metric - Accumulated Reward over Episodes
+
+# Accumulated Reward over Episodes Plots 
+
+1. Multi-Armed Bandit Model
+ ![models](./images/bandit.PNG)
+
+2. Q-Learning Model
+![models](./images/q.PNG)
+
+3. Actor - Critic Model
+![models](./images/actor.PNG)
+
+# Model Comparison over an Episode
+![models](./images/final.PNG)
+
+Selected Multi-Armed Bandit Model - Considering total reward accumulated over time
+
+# Multi-Armed Bandit Model Comparison with and without Egocentric Network
+![models](./images/r5.png)
+
+## Conclusion
+
+ The intersection of emotion, technology, and activities like music, movies, and books offers exciting opportunities for creating innovative, personalized recommendation systems to enhance emotional well-being. Current systems range from traditional methods like Collaborative Filtering and Content-Based Filtering to more advanced techniques such as Reinforcement Learning and Deep Learning.
+
+This review has explored various research methods and their limitations. By incorporating reinforcement learning, recommendation systems can continuously improve based on user feedback, refining suggestions over time. The integration of reinforcement learning with egocentric networks opens up even more possibilities for delivering highly personalized content, revolutionizing how recommendations are made.
+
+## Demonstration
+
+[Demonstration](https://drive.google.com/file/d/1BxwH40349EGl-hMQshfShJmk5cC-9AJv/view?usp=sharing)
 
 ## Publications
 [//]: # "Note: Uncomment each once you uploaded the files to the repository"
@@ -119,7 +169,7 @@ Integrating reinforcement learning and ego-centric networks, we are looking to d
 1. [Semester 7 report](https://drive.google.com/file/d/1xcnS8RT5Oespy-3DoWMvOHjmXRRaE2qW/view?usp=sharing)
 2. [Semester 7 slides](https://drive.google.com/file/d/1NWSspUSANlgXIz6vvp6gNuUE-fVt16DS/view?usp=sharing)
 <!-- 3. [Semester 8 report](./) -->
-<!-- 4. [Semester 8 slides](./) -->
+4. [Semester 8 slides](https://docs.google.com/presentation/d/1BEKcbyikxMcrObGJWnIrqSM_-8iXIx9xepx1-xu5WZ8/edit?usp=sharing)
 <!-- 5. Author 1, Author 2 and Author 3 "Research paper title" (2021). [PDF](./). -->
 
 
